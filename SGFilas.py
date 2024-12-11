@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Apr 20 12:01:26 2024
-
-@author: alexa
-"""
-
 import numpy as np
 from numpy import random as rd
 import streamlit as stlt
@@ -100,7 +93,7 @@ def ordenar_linha(B,n):
 
 
 #SIMULAÇÃO
-def fila(n_atendentes, n_grupos, taxas, tipos, parametros, T_zero):
+def fila(n_atendentes, n_grupos, taxas, tipos, parametros, T_zero, tol):
     #transformando as taxas em percentual
     taxa_global = sum(taxas)
     taxa_global_inverso = 1/taxa_global
@@ -313,20 +306,24 @@ def fila(n_atendentes, n_grupos, taxas, tipos, parametros, T_zero):
     
     n_1 = np.zeros(n_grupos) #registrar numero de demandas de cada grupo
     n_2 = np.zeros(n_grupos) #registrar numero de demandas de cada grupo atendido dentro do limite de tempo
+    n_3 = np.zeros(n_grupos) #vai somar os tempos de espera + atendimento
     nivel_servico = np.zeros(n_grupos)
+    tempo_medio = np.zeros(n_grupos)
     
     for i in range(0,num_chegadas):
         grupo_obs = matriz_dados[2][i]
         grupo_obs = int(grupo_obs)
         n_1[grupo_obs-1] = n_1[grupo_obs-1]+1
+        n_3[grupo_obs-1] = n_3[grupo_obs-1] + (matriz_dados[3][i] - matriz_dados[1][i])
         if (matriz_dados[3][i] - matriz_dados[1][i]) <= tol[grupo_obs-1]: 
             n_2[grupo_obs-1] = n_2[grupo_obs-1]+1
     
     for i in range(0,n_grupos):
         nivel_servico[i] = n_2[i]/n_1[i]
+        tempo_medio[i] = n_3[i]/n_1[i]
         
     #terminei a simulação
-    return(nivel_servico)
+    return(nivel_servico, tempo_medio)
 
 
 # Botão para executar o teste
@@ -337,7 +334,8 @@ if stlt.button("Executar Simulação"):
     
     # Exibir os resultados
     stlt.subheader("Resultados da Simulação")
-    for i, nivel in enumerate(TESTE):
-        stlt.write(f"Nível de serviço alcançado para o Grupo {i + 1}: {nivel * 100:.2f}%")   
-            
+    for i in range(0,n_grupos):
+        stlt.write(f"Nível de serviço alcançado para o Grupo {i + 1}: {TESTE[0][i]*100}%")
+        stlt.write(f"Tempo médio de espera mais atendimento para o Grupo {i + 1}: {TESTE[1][i]}")
+    
   
