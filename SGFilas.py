@@ -330,7 +330,7 @@ def fila(n_atendentes, n_grupos, taxas, tipos, parametros, T_zero, tol):
 if stlt.button("Executar Simulação"):
     with stlt.spinner("Executando a simulação, aguarde..."):
         # Executar a simulação
-        TESTE = fila(n_at, n_grupos, taxas, tipos, parametros, T_zero)
+        TESTE = fila(n_at, n_grupos, taxas, tipos, parametros, T_zero, tol)
     
     # Exibir os resultados
     stlt.subheader("Resultados da Simulação")
