@@ -315,7 +315,7 @@ def fila(n_atendentes, n_grupos, taxas, tipos, parametros, T_zero, tol):
         grupo_obs = int(grupo_obs)
         n_1[grupo_obs-1] = n_1[grupo_obs-1]+1
         n_3[grupo_obs-1] = n_3[grupo_obs-1] + (matriz_dados[3][i] - matriz_dados[1][i])
-        if (matriz_dados[3][i] - matriz_dados[1][i]) <= tol[grupo_obs-1]: 
+        if (matriz_dados[3][i] - matriz_dados[7][i] - matriz_dados[1][i]) <= tol[grupo_obs-1]: 
             n_2[grupo_obs-1] = n_2[grupo_obs-1]+1
     
     for i in range(0,n_grupos):
